@@ -5,6 +5,10 @@ import userEvent from '@testing-library/user-event';
 
 import { TopologyControlBar, createTopologyControlButtons, defaultControlButtonsOptions } from '../TopologyControlBar';
 
+jest.mock('@patternfly/react-core/dist/js/helpers/GenerateId/GenerateId', () => ({
+  GenerateId: ({ children }) => children('generated-id')
+}));
+
 describe('TopologyControlBar', () => {
   test('should display the default controls correctly', async () => {
     const controlButtons = createTopologyControlButtons();

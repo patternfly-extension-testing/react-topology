@@ -2,6 +2,10 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { TopologyView } from '../index';
 
+jest.mock('@patternfly/react-core/dist/js/helpers/GenerateId/GenerateId', () => ({
+  GenerateId: ({ children }) => children('generated-id')
+}));
+
 describe('TopologyView', () => {
   test('should display an empty topology correctly', () => {
     const { asFragment } = render(<TopologyView className="my-test-class" id="simple-test-id" />);

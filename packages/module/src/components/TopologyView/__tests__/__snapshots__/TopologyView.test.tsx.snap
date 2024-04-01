@@ -31,7 +31,7 @@ exports[`TopologyView should display topology correctly 1`] = `
         data-ouia-component-id="OUIA-Generated-Toolbar-1"
         data-ouia-component-type="PF5/Toolbar"
         data-ouia-safe="true"
-        id="pf-topology-view-pf-1711984725341kolep74x65n"
+        id="generated-id"
       >
         <div
           class="pf-v5-c-toolbar__content"
