@@ -1,10 +1,10 @@
 # PatternFly Topology
-
+ 
 This package provides the resources necessary to use PatternFly Topology, an open source utility that you can use to create a visual representation of all the applications within your project, their build status, and the components and services associated with them.
 
-Topology utilizes some of PatternFly's React components https://github.com/patternfly/patternfly-react.
+Topology utilizes some of PatternFly's React components https://github.com/patternfly/patternfly-react. 
 
-Documentation for Topology and its features is available on [the PatternFly website.](www.patternfly.org/topology/about-topology)
+Documentation for Topology and its features is available on [the PatternFly website.](www.patternfly.org/extensions/topology/overview)
 
 ## Table of contents
 
@@ -78,7 +78,7 @@ To use Topology out of the box, follow these steps:
 ## Example
 
 ```ts
-import * as React from 'react';
+import { memo, useState, useMemo } from 'react';
 import {
   EdgeStyle,
   Model,
@@ -172,10 +172,10 @@ const EDGES = [
   }
 ];
 
-export const TopologyBaselineDemo = React.memo(() => {
-  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
+export const TopologyBaselineDemo = memo(() => {
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  const controller = React.useMemo(() => {
+  const controller = useMemo(() => {
     const model: Model = {
       nodes: NODES,
       edges: EDGES,
@@ -214,3 +214,9 @@ See the instructions to install and run the demo app, here: [Demo README.md](pac
 ## Need help?
 
 If you find a bug, have a request, or have any questions about Topology that aren't answered in our documentation, please [reach out to us on Slack.](https://patternfly.slack.com/archives/CK7URGJ2W)
+
+## Contributing to Topology
+
+### AI-assisted development guidelines
+
+Please reference [PatternFly's AI-assisted development guidelines](https://github.com/patternfly/.github/blob/main/CONTRIBUTING.md) if you'd like to contribute code generated using AI.

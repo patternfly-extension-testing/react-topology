@@ -1,10 +1,12 @@
 ---
 id: Anchors
-section: topology
+section: extensions
+subsection: topology
 sortValue: 13
 sourceLink: https://github.com/patternfly/react-topology/blob/main/packages/module/patternfly-docs/content/examples/TopologyAnchorsDemo.tsx
 ---
 
+import { useMemo } from 'react';
 import {
   AbstractAnchor,
   AnchorEnd,

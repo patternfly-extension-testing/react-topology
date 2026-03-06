@@ -1,11 +1,13 @@
 ---
 id: Custom nodes
-section: topology
+section: extensions
+subsection: topology
 sortValue: 11
 sourceLink: https://github.com/patternfly/react-topology/blob/main/packages/module/patternfly-docs/content/examples/TopologyCustomNodesDemo.tsx
 propComponents: ['DefaultNode', 'DefaultEdge', 'DefaultGroup']
 ---
 
+import { useState, useMemo } from 'react';
 import {
   ColaLayout,
   DefaultEdge,

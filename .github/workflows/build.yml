@@ -17,9 +17,10 @@ jobs:
       - name: Run build script
         run: ./devSetup.sh
         shell: bash
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-      - run: yarn install --frozen-lockfile
+          node-version: '20'
+      - run: corepack enable
+      - run: yarn install --immutable
       - name: Build dist
         run: yarn build

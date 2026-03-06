@@ -14,10 +14,11 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-      - run: yarn install --frozen-lockfile
+          node-version: '20'
+      - run: corepack enable
+      - run: yarn install --immutable
       - name: generate
         run: cd packages/module && yarn generate
       - name: Build dist

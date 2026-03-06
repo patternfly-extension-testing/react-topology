@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { css } from '@patternfly/react-styles';
 import { Tooltip, TooltipPosition } from '@patternfly/react-core';
@@ -174,15 +174,17 @@ const DefaultNodeInner: React.FunctionComponent<DefaultNodeInnerProps> = observe
     raiseLabelOnHover = true,
     hideContextMenuKebab
   }) => {
-    const [hovered, hoverRef] = useHover();
+    const [nodeHovered, hoverRef] = useHover();
+    const [labelHovered, labelRef] = useHover();
+    const hovered = nodeHovered || labelHovered;
     const status = nodeStatus || element.getNodeStatus();
     const refs = useCombineRefs<SVGEllipseElement>(hoverRef, dragNodeRef);
     const { width, height } = element.getDimensions();
     const isHover = hover !== undefined ? hover : hovered;
-    const [nodeScale, setNodeScale] = React.useState<number>(1);
-    const decoratorRef = React.useRef();
+    const [nodeScale, setNodeScale] = useState<number>(1);
+    const decoratorRef = useRef(null);
 
-    const statusDecorator = React.useMemo(() => {
+    const statusDecorator = useMemo(() => {
       if (!status || !showStatusDecorator) {
         return null;
       }
@@ -220,7 +222,7 @@ const DefaultNodeInner: React.FunctionComponent<DefaultNodeInnerProps> = observe
       return decorator;
     }, [status, showStatusDecorator, getShapeDecoratorCenter, element, statusDecoratorTooltip, onStatusDecoratorClick]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (isHover) {
         onShowCreateConnector && onShowCreateConnector();
       } else {
@@ -257,11 +259,11 @@ const DefaultNodeInner: React.FunctionComponent<DefaultNodeInnerProps> = observe
     const nodeLabelPosition = labelPosition || element.getLabelPosition();
     const scale = element.getGraph().getScale();
 
-    const animationRef = React.useRef<number>();
-    const scaleGoal = React.useRef<number>(1);
-    const nodeScaled = React.useRef<boolean>(false);
+    const animationRef = useRef<number>(null);
+    const scaleGoal = useRef<number>(1);
+    const nodeScaled = useRef<boolean>(false);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (!scaleNode || scale >= 1) {
         setNodeScale(1);
         nodeScaled.current = false;
@@ -312,7 +314,7 @@ const DefaultNodeInner: React.FunctionComponent<DefaultNodeInnerProps> = observe
     const labelScale = scaleLabel ? counterScale(scale, 0.35, 0.85, 1, 1.6) : 1;
     const labelPositionScale = scaleLabel ? Math.min(1, 1 / labelScale) : 1;
 
-    const { translateX, translateY } = React.useMemo(() => {
+    const { translateX, translateY } = useMemo(() => {
       if (!scaleNode) {
         return { translateX: 0, translateY: 0 };
       }
@@ -348,6 +350,7 @@ const DefaultNodeInner: React.FunctionComponent<DefaultNodeInnerProps> = observe
 
       const nodeLabel = (
         <g
+          ref={labelRef}
           transform={
             raiseLabelOnHover && isHover
               ? `${scaleNode ? `translate(${translateX}, ${translateY})` : ''} scale(${nodeScale})`
@@ -385,7 +388,11 @@ const DefaultNodeInner: React.FunctionComponent<DefaultNodeInnerProps> = observe
         </g>
       );
       if (isHover && raiseLabelOnHover) {
-        return <Layer id={TOP_LAYER}>{nodeLabel}</Layer>;
+        return (
+          <Layer id={TOP_LAYER}>
+            <g className={groupClassName}>{nodeLabel}</g>
+          </Layer>
+        );
       }
       return nodeLabel;
     };

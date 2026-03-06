@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, useContext, FunctionComponent, MouseEvent as ReactMouseEvent } from 'react';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
 import {
   GRAPH_POSITION_CHANGE_EVENT,
@@ -34,19 +34,21 @@ interface TopologyViewComponentProps {
   sideBarResizable?: boolean;
 }
 
-const TopologyViewComponent: React.FunctionComponent<TopologyViewComponentProps> = observer(
+const TopologyViewComponent: FunctionComponent<TopologyViewComponentProps> = observer(
   ({ useSidebar, sideBarResizable = false }) => {
-    const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
-    const [showAreaDragHint, setShowAreaDragHint] = React.useState<boolean>(false);
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const [showAreaDragHint, setShowAreaDragHint] = useState<boolean>(false);
     const controller = useVisualizationController();
-    const options = React.useContext(DemoContext);
+    const options = useContext(DemoContext);
+    const hasGraph = controller.hasGraph();
 
-    React.useEffect(() => {
+    useEffect(() => {
       const dataModel = generateDataModel(
         options.creationCounts.numNodes,
         options.creationCounts.numGroups,
         options.creationCounts.numEdges,
-        options.creationCounts.nestedLevel
+        options.creationCounts.nestedLevel,
+        options.layout
       );
 
       const model = {
@@ -59,7 +61,16 @@ const TopologyViewComponent: React.FunctionComponent<TopologyViewComponentProps>
       };
 
       controller.fromModel(model, true);
+      controller.getGraph().layout();
     }, [controller, options.creationCounts, options.layout]);
+
+    // Once we have the graph, run the layout. This ensures the graph size is set (by the initial size observation in VisualizationSurface)
+    // and the graph is centered by the layout.
+    useEffect(() => {
+      if (hasGraph) {
+        controller.getGraph().layout();
+      }
+    }, [hasGraph, controller]);
 
     useEventListener<SelectionEventListener>(SELECTION_EVENT, (ids) => {
       setSelectedIds(ids);
@@ -90,7 +101,7 @@ const TopologyViewComponent: React.FunctionComponent<TopologyViewComponentProps>
       setShowAreaDragHint(isDragging);
     });
 
-    React.useEffect(() => {
+    useEffect(() => {
       let resizeTimeout: NodeJS.Timeout;
 
       if (selectedIds[0]) {
@@ -110,17 +121,17 @@ const TopologyViewComponent: React.FunctionComponent<TopologyViewComponentProps>
       };
     }, [selectedIds, controller]);
 
-    React.useEffect(() => {
-      controller.addEventListener(GRAPH_POSITION_CHANGE_EVENT, graphPositionChangeListener);
-      controller.addEventListener(GRAPH_LAYOUT_END_EVENT, layoutEndListener);
-
-      return () => {
+    useEffect(() => {
+      if (options.logEvents) {
+        controller.addEventListener(GRAPH_POSITION_CHANGE_EVENT, graphPositionChangeListener);
+        controller.addEventListener(GRAPH_LAYOUT_END_EVENT, layoutEndListener);
+      } else {
         controller.removeEventListener(GRAPH_POSITION_CHANGE_EVENT, graphPositionChangeListener);
         controller.removeEventListener(GRAPH_LAYOUT_END_EVENT, layoutEndListener);
-      };
-    }, [controller]);
+      }
+    }, [controller, options.logEvents]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       controller.getGraph().setDetailsLevelThresholds({
         low: options.lowScale,
         medium: options.medScale
@@ -149,7 +160,7 @@ const TopologyViewComponent: React.FunctionComponent<TopologyViewComponentProps>
   }
 );
 
-export const Topology: React.FC<{ useSidebar?: boolean; sideBarResizable?: boolean }> = ({
+export const Topology: FunctionComponent<{ useSidebar?: boolean; sideBarResizable?: boolean }> = ({
   useSidebar = false,
   sideBarResizable = false
 }) => {
@@ -165,10 +176,10 @@ export const Topology: React.FC<{ useSidebar?: boolean; sideBarResizable?: boole
   );
 };
 
-export const TopologyPackage: React.FunctionComponent = () => {
-  const [activeKey, setActiveKey] = React.useState<string | number>(0);
+export const TopologyPackage: FunctionComponent = () => {
+  const [activeKey, setActiveKey] = useState<string | number>(0);
 
-  const handleTabClick = (_event: React.MouseEvent<HTMLElement, MouseEvent>, tabIndex: string | number) => {
+  const handleTabClick = (_event: ReactMouseEvent<HTMLElement, MouseEvent>, tabIndex: string | number) => {
     setActiveKey(tabIndex);
   };
 

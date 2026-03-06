@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, memo } from 'react';
 import {
   DagreLayout,
   EdgeModel,
@@ -19,6 +19,7 @@ import {
 import defaultComponentFactory from '../../components/defaultComponentFactory';
 import statusConnectorsComponentFactory from './statusConnectorsComponentFactory';
 import DemoControlBar from '../DemoControlBar';
+import { LayoutType } from '../../layouts/defaultLayoutFactory';
 
 const DEFAULT_CHAR_WIDTH = 8;
 const DEFAULT_NODE_SIZE = 75;
@@ -57,9 +58,9 @@ const defaultLayoutFactory: LayoutFactory = (type: string, graph: Graph): Layout
 
 export const StatusConnectorsDemo: React.FunctionComponent = () => {
   const controller = useVisualizationController();
-  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const nodes: NodeModel[] = [
       {
         id: '1',
@@ -184,7 +185,7 @@ export const StatusConnectorsDemo: React.FunctionComponent = () => {
     const graph = {
       id: 'g1',
       type: 'graph',
-      layout: 'Dagre'
+      layout: LayoutType.Dagre
     };
 
     const model = { graph, nodes, edges };
@@ -203,7 +204,7 @@ export const StatusConnectorsDemo: React.FunctionComponent = () => {
   );
 };
 
-export const StatusConnectors = React.memo(() => {
+export const StatusConnectors = memo(() => {
   const controller = new Visualization();
   controller.registerLayoutFactory(defaultLayoutFactory);
   controller.registerComponentFactory(defaultComponentFactory);

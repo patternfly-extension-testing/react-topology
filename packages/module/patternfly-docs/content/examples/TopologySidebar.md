@@ -1,11 +1,13 @@
 ---
 id: Sidebar
-section: topology
+section: extensions
+subsection: topology
 sortValue: 33
 sourceLink: https://github.com/patternfly/react-topology/blob/main/packages/module/patternfly-docs/content/examples/TopologySidebarDemo.tsx
 propComponents: ['TopologySideBar', 'TopologyView']
 ---
 
+import { useState, useMemo } from 'react';
 import {
   ColaLayout,
   DefaultEdge,

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useCallback, useState } from 'react';
 import {
   Model,
   ModelKind,
@@ -10,7 +10,7 @@ import {
   useModel,
   ComponentFactory
 } from '@patternfly/react-topology';
-import defaultLayoutFactory from '../layouts/defaultLayoutFactory';
+import defaultLayoutFactory, { LayoutType } from '../layouts/defaultLayoutFactory';
 import defaultComponentFactory from '../components/defaultComponentFactory';
 import GroupHull from '../components/GroupHull';
 import Group from '../components/DemoDefaultGroup';
@@ -41,7 +41,7 @@ const layoutStory =
 
     // support pan zoom and drag
     useComponentFactory(
-      React.useCallback<ComponentFactory>((kind: string, type: string) => {
+      useCallback<ComponentFactory>((kind: string, type: string) => {
         if (kind === ModelKind.graph) {
           return withPanZoom()(GraphComponent);
         }
@@ -61,12 +61,12 @@ const layoutStory =
     return null;
   };
 
-export const Force = withTopologySetup(layoutStory(getModel('Force')));
-export const Dagre = withTopologySetup(layoutStory(getModel('Dagre')));
-export const Cola = withTopologySetup(layoutStory(getModel('Cola')));
+export const Force = withTopologySetup(layoutStory(getModel(LayoutType.Force)));
+export const Dagre = withTopologySetup(layoutStory(getModel(LayoutType.Dagre)));
+export const Cola = withTopologySetup(layoutStory(getModel(LayoutType.Cola)));
 
 export const Layouts: React.FunctionComponent = () => {
-  const [activeKey, setActiveKey] = React.useState<string | number>(0);
+  const [activeKey, setActiveKey] = useState<string | number>(0);
 
   const handleTabClick = (_event: React.MouseEvent<HTMLElement, MouseEvent>, tabIndex: string | number) => {
     setActiveKey(tabIndex);
