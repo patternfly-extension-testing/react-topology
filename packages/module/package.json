@@ -54,7 +54,7 @@
   "devDependencies": {
     "@patternfly/documentation-framework": "^6.24.2",
     "@patternfly/patternfly": "^6.4.0",
-    "@patternfly/patternfly-a11y": "^4.3.1",
+    "@patternfly/patternfly-a11y": "^5.2.1",
     "@patternfly/react-code-editor": "^6.4.0",
     "@patternfly/react-table": "^6.4.0",
     "@types/react": "^18.0.0",
