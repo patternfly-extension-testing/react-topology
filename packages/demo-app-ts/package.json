@@ -9,9 +9,9 @@
     "serve:demo-app": "node scripts/serve"
   },
   "dependencies": {
-    "@patternfly/react-core": "^6.5.0-prerelease.37",
-    "@patternfly/react-icons": "^6.5.0-prerelease.15",
-    "@patternfly/react-styles": "^6.5.0-prerelease.13",
+    "@patternfly/react-core": "^6.5.0-prerelease.48",
+    "@patternfly/react-icons": "^6.5.0-prerelease.19",
+    "@patternfly/react-styles": "^6.5.0-prerelease.15",
     "react": "^18",
     "react-dom": "^18",
     "react-router": "^5.3.3",
